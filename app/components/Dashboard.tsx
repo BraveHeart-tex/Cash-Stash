@@ -19,7 +19,7 @@ const Dashboard = () => {
   return (
     <Container maxW={'8xl'} p={4}>
       <Navigation />
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4} mt={8}>
+      <SimpleGrid columns={{ base: 1, md: 2, xl: 3 }} spacing={4} mt={8}>
         <Box>
           <Heading size='md' mb={2}>
             Accounts Summary

@@ -2,7 +2,6 @@
 import {
   Box,
   Flex,
-  Heading,
   IconButton,
   Drawer,
   DrawerOverlay,
@@ -10,32 +9,67 @@ import {
   DrawerCloseButton,
   DrawerHeader,
   DrawerBody,
-  Link,
   Stack,
   useDisclosure,
   useColorMode,
 } from '@chakra-ui/react';
+import { Link } from '@chakra-ui/next-js';
 import { HamburgerIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
+import Logo from './Logo.svg';
+import Image from 'next/image';
+import UserMenu from './UserMenu';
+
+const NAV_LINKS = [
+  { name: 'Dashboard', href: '/' },
+  { name: 'Accounts', href: '/accounts' },
+  { name: 'Budgets', href: '/budgets' },
+  { name: 'Goals', href: '/goals' },
+  { name: 'Transactions', href: '/transactions' },
+  { name: 'Reports', href: '/reports' },
+];
 
 const Navigation = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
   return (
-    <Box p={4}>
+    <Box mb={6} boxShadow={'lg'} rounded={'md'} p={4}>
       <Flex justify='space-between' align='center'>
         <IconButton
           icon={<HamburgerIcon />}
           aria-label='Menu'
           variant='ghost'
           onClick={onOpen}
-          display={{ base: 'block', md: 'none' }}
+          display={{ base: 'block', lg: 'none' }}
         />
-        <Heading size='lg'>FinanceBuddy</Heading>
-        <IconButton
-          onClick={toggleColorMode}
-          aria-label='Toggle color mode'
-          icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-        />
+        <Link href={'/'}>
+          <Image
+            src={Logo}
+            alt='Cash Stash'
+            width={185}
+            style={{
+              filter:
+                colorMode === 'light' ? 'brightness(0)' : 'brightness(10)',
+            }}
+          />
+        </Link>
+        <Flex display={{ base: 'none', lg: 'flex' }}>
+          {NAV_LINKS.map((link) => (
+            <Link className='nav-link' key={link.name} href={link.href} mr={4}>
+              {link.name}
+            </Link>
+          ))}
+        </Flex>
+        <Flex justifyContent={'center'} alignItems={'center'} gap={4}>
+          <IconButton
+            onClick={toggleColorMode}
+            aria-label='Toggle color mode'
+            icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+            bg={'transparent'}
+            _hover={{ bg: colorMode === 'light' ? 'gray.200' : 'gray.700' }}
+            color={colorMode === 'light' ? 'gray.600' : 'yellow.400'}
+          />
+          <UserMenu />
+        </Flex>
       </Flex>
 
       <Drawer placement='left' onClose={onClose} isOpen={isOpen}>
@@ -45,11 +79,11 @@ const Navigation = () => {
           <DrawerHeader>Menu</DrawerHeader>
           <DrawerBody>
             <Stack spacing={4}>
-              <Link href='/'>Dashboard</Link>
-              <Link href='/accounts'>Accounts</Link>
-              <Link href='/budgets'>Budgets</Link>
-              <Link href='/goals'>Goals</Link>
-              <Link href='/transactions'>Transactions</Link>
+              {NAV_LINKS.map((link) => (
+                <Link key={link.name} href={link.href}>
+                  {link.name}
+                </Link>
+              ))}
             </Stack>
           </DrawerBody>
         </DrawerContent>
